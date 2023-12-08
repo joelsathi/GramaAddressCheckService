@@ -36,16 +36,24 @@ service /addresscheck on new http:Listener(3000) {
     }
 }
 
+
+
 public type User record {|
     string id;
     string address;
 |};
 
+configurable string host = ?;
+configurable string username = ?;
+configurable string db = ?;
+configurable string password = ?;
+configurable int port = ?;
+
  function checkAddress(User user) returns boolean|sql:Error? {
     postgresql:Client dbClient =
-        check new ("pg-7902e7c7-f73b-401f-a1db-07c524deb30a-gramadb1173796818-chore.a.aivencloud.com", 
-        "avnadmin", "AVNS_9-DvxwnPEN4UQCo6gHA",
-        "GramaDatabase", 25416
+        check new (host, 
+        username, password,
+        db, port
     );
 
     sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.id};`;
