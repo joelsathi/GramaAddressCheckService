@@ -13,7 +13,7 @@ service /addresscheck on new http:Listener(3000) {
 
         http:Response response = new;
 
-        boolean isValidNIC = validateNic(user.id);
+        boolean isValidNIC = validateNic(user.nic);
         if (!isValidNIC) {
             response.statusCode = 400;
             response.setPayload({status:"Error",description: "Invalid NIC"});
@@ -39,7 +39,7 @@ service /addresscheck on new http:Listener(3000) {
 
 
 public type User record {|
-    string id;
+    string nic;
     string address;
 |};
 
@@ -56,7 +56,7 @@ configurable int port = ?;
         db, port
     );
 
-    sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.id};`;
+    sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.nic};`;
 
 
     sql:ExecutionResult|error result = dbClient->queryRow(query);
