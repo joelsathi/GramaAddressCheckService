@@ -53,7 +53,7 @@ configurable int port = ?;
     postgresql:Client dbClient =
         check new (host, 
         username, password,
-        db, port
+        db, port, connectionPool = {maxOpenConnections: 5}
     );
 
     sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.nic};`;
