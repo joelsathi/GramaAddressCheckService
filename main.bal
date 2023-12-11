@@ -15,7 +15,7 @@ service /addresscheck on new http:Listener(3000) {
 
         boolean isValidNIC = validateNic(user.nic);
         if (!isValidNIC) {
-            response.statusCode = 400;
+            response.statusCode = 200;
             response.setPayload({status:"Error",description: "Invalid NIC"});
             check caller->respond(response);
             return;
