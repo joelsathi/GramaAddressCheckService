@@ -1,14 +1,12 @@
 import ballerina/io;
 import ballerina/http;
 import ballerinax/postgresql.driver as _;
-import ballerinax/postgresql;
-import ballerina/sql;
 
 public function main() {
 
 }
 
-service /addresscheck on new http:Listener(3000) {
+service / on new http:Listener(3000) {
     resource function post addressCheck(@http:Payload User user, http:Caller caller) returns error?{
 
         http:Response response = new;
@@ -34,44 +32,25 @@ service /addresscheck on new http:Listener(3000) {
         check caller->respond(response);
         return;
     }
-}
 
+    resource function post updateStatus(@http:Payload StatusEntry entry, http:Caller caller)returns error? {
 
+        io:println(entry);
+        http:Response response = new;
+        string|error res = updateStatus(entry);
 
-public type User record {|
-    string nic;
-    string address;
-|};
-
-configurable string host = ?;
-configurable string username = ?;
-configurable string db = ?;
-configurable string password = ?;
-configurable int port = ?;
-
- function checkAddress(User user) returns boolean|sql:Error? {
-    postgresql:Client dbClient =
-        check new (host, 
-        username, password,
-        db, port, connectionPool = {maxOpenConnections: 5}
-    );
-
-    sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.nic};`;
-
-
-    sql:ExecutionResult|error result = dbClient->queryRow(query);
-    io:println(result);
-
-    check dbClient.close();
-
-    if (result is error) {
-        return false;
-    } else {
-        return (string:toLowerAscii(result["address"].toString()) == string:toLowerAscii(user.address));
+        
+        if(res is error) {
+            response.statusCode = 200;
+            response.setPayload({status: "Error", description: "Something went wrong! please try again after some time"});
+        } else {
+            response.statusCode = 201;
+           response.setPayload({status: "Success", description: res});
+        }
+        
     }
-
-    
 }
+
 
 function validateNic(string nic) returns boolean {
     boolean isValid = false;
