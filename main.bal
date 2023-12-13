@@ -24,9 +24,9 @@ service / on new http:Listener(3000) {
 
         response.statusCode = 200;
         if (status) {
-            response.setPayload({status: "Success", description: "Address is checked!"});
+            response.setPayload({status: 2, description: "Address is checked!"});
         } else {
-            response.setPayload({ status: "Error", description: "Address is not tallied!"});
+            response.setPayload({ status: 1, description: "Address is not tallied!"});
         }
         
         check caller->respond(response);
@@ -34,8 +34,6 @@ service / on new http:Listener(3000) {
     }
 
     resource function post updateStatus(@http:Payload StatusEntry entry, http:Caller caller)returns error? {
-
-        io:println(entry);
         http:Response response = new;
         string|error res = updateStatus(entry);
 
@@ -47,7 +45,24 @@ service / on new http:Listener(3000) {
             response.statusCode = 201;
            response.setPayload({status: "Success", description: res});
         }
+
+        check caller->respond(response);
         
+    }
+
+    resource function post getStatus(@http:Payload Nic nic, http:Caller caller) returns error? {
+        io:println("running: ", nic.nic);
+        http:Response response = new;
+        json[] result = check getStatusHistory(nic.nic);
+
+        response.statusCode = 200;
+       
+        json respObj = {"result": result};
+        
+        response.setHeader("Content-Type", "application/json");
+        response.setPayload(respObj);
+
+        check caller->respond(response.getJsonPayload());
     }
 }
 

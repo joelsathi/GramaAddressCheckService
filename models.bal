@@ -10,3 +10,16 @@ public type StatusEntry record {|
     int addressCheckStatus;
 
 |};
+
+public type Nic record {|
+    string nic;
+|};
+
+public type StatusRecord record {|
+    int id;
+    string user_id;
+    int police_check_status;
+    int id_check_status;
+    int address_check_status;
+
+|};

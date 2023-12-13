@@ -7,7 +7,7 @@ configurable string db = ?;
 configurable string password = ?;
 configurable int port = ?;
 
-function dbQuery(sql:ParameterizedQuery query) returns error|sql:ExecutionResult {
+function dbQueryRow(sql:ParameterizedQuery query) returns error|sql:ExecutionResult {
     postgresql:Client dbClient = check new (host, username, password,
     db, port, connectionPool = {maxOpenConnections: 5});
 
@@ -17,3 +17,26 @@ function dbQuery(sql:ParameterizedQuery query) returns error|sql:ExecutionResult
 
     return result;
 };
+
+function dbExecute(sql:ParameterizedQuery query) returns error|sql:ExecutionResult {
+    postgresql:Client dbClient = check new (host, username, password,
+    db, port, connectionPool = {maxOpenConnections: 5});
+
+    sql:ExecutionResult|error result = dbClient->execute(query);
+
+    check dbClient.close();
+
+    return result;
+};
+
+function dbQuery(sql:ParameterizedQuery query) returns stream<StatusRecord, sql:Error?>|error {
+    postgresql:Client dbClient = check new (host, username, password,
+    db, port, connectionPool = {maxOpenConnections: 5});
+
+    stream<StatusRecord, sql:Error?> result = dbClient->query(query);
+
+    check dbClient.close();
+
+    return result;
+};
+
