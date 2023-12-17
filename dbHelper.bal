@@ -18,25 +18,25 @@ function dbQueryRow(sql:ParameterizedQuery query) returns error|sql:ExecutionRes
     return result;
 };
 
-function dbExecute(sql:ParameterizedQuery query) returns error|sql:ExecutionResult {
-    postgresql:Client dbClient = check new (host, username, password,
-    db, port, connectionPool = {maxOpenConnections: 5});
+// function dbExecute(sql:ParameterizedQuery query) returns error|sql:ExecutionResult {
+//     postgresql:Client dbClient = check new (host, username, password,
+//     db, port, connectionPool = {maxOpenConnections: 5});
 
-    sql:ExecutionResult|error result = dbClient->execute(query);
+//     sql:ExecutionResult|error result = dbClient->execute(query);
 
-    check dbClient.close();
+//     check dbClient.close();
 
-    return result;
-};
+//     return result;
+// };
 
-function dbQuery(sql:ParameterizedQuery query) returns stream<StatusRecord, sql:Error?>|error {
-    postgresql:Client dbClient = check new (host, username, password,
-    db, port, connectionPool = {maxOpenConnections: 5});
+// function dbQuery(sql:ParameterizedQuery query) returns stream<StatusRecord, sql:Error?>|error {
+//     postgresql:Client dbClient = check new (host, username, password,
+//     db, port, connectionPool = {maxOpenConnections: 5});
 
-    stream<StatusRecord, sql:Error?> result = dbClient->query(query);
+//     stream<StatusRecord, sql:Error?> result = dbClient->query(query);
 
-    check dbClient.close();
+//     check dbClient.close();
 
-    return result;
-};
+//     return result;
+// };
 

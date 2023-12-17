@@ -33,37 +33,39 @@ service / on new http:Listener(3000) {
         return;
     }
 
-    resource function post updateStatus(@http:Payload StatusEntry entry, http:Caller caller)returns error? {
-        http:Response response = new;
-        string|error res = updateStatus(entry);
+    // resource function post updateStatus(@http:Payload StatusEntry entry, http:Caller caller)returns error? {
+    //     http:Response response = new;
+    //     string|error res = updateStatus(entry);
 
         
-        if(res is error) {
-            response.statusCode = 200;
-            response.setPayload({status: "Error", description: "Something went wrong! please try again after some time"});
-        } else {
-            response.statusCode = 201;
-           response.setPayload({status: "Success", description: res});
-        }
+    //     if(res is error) {
+    //         response.statusCode = 200;
+    //         response.setPayload({status: "Error", description: "Something went wrong! please try again after some time"});
+    //     } else {
+    //         response.statusCode = 201;
+    //        response.setPayload({status: "Success", description: res});
+    //     }
 
-        check caller->respond(response);
+    //     check caller->respond(response);
         
-    }
+    // }
 
-    resource function post getStatus(@http:Payload Nic nic, http:Caller caller) returns error? {
-        io:println("running: ", nic.nic);
-        http:Response response = new;
-        json[] result = check getStatusHistory(nic.nic);
+    // resource function post getStatus(@http:Payload Nic nic, http:Caller caller) returns error? {
+    //     io:println("running: ", nic.nic);
+    //     http:Response response = new;
+    //     json[] result = check getStatusHistory(nic.nic);
 
-        response.statusCode = 200;
+    //     response.statusCode = 200;
        
-        json respObj = {"result": result};
+    //     json respObj = {"result": result};
         
-        response.setHeader("Content-Type", "application/json");
-        response.setPayload(respObj);
+    //     response.setHeader("Content-Type", "application/json");
+    //     response.setPayload(respObj);
 
-        check caller->respond(response.getJsonPayload());
-    }
+    //     check caller->respond(response.getJsonPayload());
+    // }
+
+    
 }
 
 
