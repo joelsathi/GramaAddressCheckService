@@ -1,5 +1,11 @@
 import ballerina/sql;
 import ballerina/io;
+
+# Function to check if the given user's address matches the address in the database.
+# 
+# + user - The User object containing user information, including ID and address.
+# + return - return true if the user's address matches the address in the database, false otherwise and
+#  returns sql:Error if there is an error in the SQL execution.
  function checkAddress(User user) returns boolean|sql:Error? {
 
     sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.nic};`;
@@ -10,6 +16,7 @@ import ballerina/io;
     if (result is error) {
         return false;
     } else {
+        // compare the retrieved address with the user's address (case-insensitive).
         return (string:toLowerAscii(result["address"].toString()) == string:toLowerAscii(user.address));
     }
 
