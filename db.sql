@@ -7,6 +7,13 @@ CREATE TABLE "user" (
     gramadevision VARCHAR(255)
 );
 
+-- Address table
+CREATE TABLE "address" (
+    land_id SERIAL PRIMARY KEY,
+    land_no VARCHAR(255),
+    street_name VARCHAR(255)
+)
+
 -- status table
 CREATE TABLE "status" (
     id SERIAL PRIMARY KEY,
