@@ -1,26 +1,46 @@
-import ballerina/sql;
 import ballerina/io;
+import ballerina/sql;
 
 # Function to check if the given user's address matches the address in the database.
-# 
+#
 # + user - The User object containing user information, including ID and address.
 # + return - return true if the user's address matches the address in the database, false otherwise and
-#  returns sql:Error if there is an error in the SQL execution.
- function checkAddress(User user) returns boolean|sql:Error? {
+# returns sql:Error if there is an error in the SQL execution.
+function checkAddress(User user) returns boolean|sql:Error? {
 
-    sql:ParameterizedQuery query = `SELECT "address" FROM "user" WHERE "id"=${user.nic};`;
+    string nic = string:toUpperAscii(user.nic);
 
-    sql:ExecutionResult|error result = dbQueryRow(query);
+    sql:ParameterizedQuery query = `SELECT
+            a.land_no,
+            a.street_name,
+            a.grama_division_no
+        FROM
+            "user" u
+        JOIN
+            "address" a ON u.land_id = a.land_id
+        WHERE
+            u.id = ${nic};`;
+
+    stream<AddressRecord, sql:Error?>|error result = dbQuery(query);
     io:println(result);
+
+    
 
     if (result is error) {
         return false;
     } else {
+
+        check from AddressRecord r in result 
+    do {
+        return (string:toLowerAscii(r.land_no) == string:toLowerAscii(user.land_no) && 
+        string:toLowerAscii(r.street_name) == string:toLowerAscii(user.street_name) &&
+        string:toLowerAscii(r.grama_division_no) == string:toLowerAscii(user.grama_division_no));
+    };
+
         // compare the retrieved address with the user's address (case-insensitive).
-        return (string:toLowerAscii(result["address"].toString()) == string:toLowerAscii(user.address));
+        return (false);
     }
 
-    
 }
 
 // function updateStatus(StatusEntry entry) returns string| error {

@@ -3,15 +3,18 @@ CREATE TABLE "user" (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     phone_no VARCHAR(15),
-    address VARCHAR(255) NOT NULL,
-    gramadevision VARCHAR(255)
+    land_id INTEGER REFERENCES "address"(land_id)
 );
+
+
+
 
 -- Address table
 CREATE TABLE "address" (
     land_id SERIAL PRIMARY KEY,
     land_no VARCHAR(255),
-    street_name VARCHAR(255)
+    street_name VARCHAR(255),
+    grama_division_no VARCHAR(255)
 )
 
 -- status table

@@ -1,19 +1,15 @@
 import ballerina/io;
 import ballerina/http;
 import ballerinax/postgresql.driver as _;
-import ballerina/log;
 
 public function main() {
 
 }
 
 service / on new http:Listener(3000) {
-    resource function post addressCheck(@http:Payload User user, http:Caller caller, http:Headers head) returns error?{
+    resource function post addressCheck(@http:Payload User user, http:Caller caller) returns error?{
 
         http:Response response = new;
-        string h = check head.getHeader("Authorization");
-        io:println(head.getHeader("Authorization"));
-        log:printInfo(h);
         
         boolean isValidNIC = validateNic(user.nic);
         if (!isValidNIC) {
@@ -88,12 +84,3 @@ function validateNic(string nic) returns boolean {
 }
 
 
-// function validateToken(string token) returns boolean|error {
-//     boolean isActive = false;
-
-//     http:Client introspect = check new ("https://api.asgardeo.io");
-//     string obj = check introspect->/t/movinsilva/oauth2/introspect.post({
-//         token: "13e23"
-//     });
-//     io:println(obj);
-// }

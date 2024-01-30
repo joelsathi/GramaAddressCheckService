@@ -1,6 +1,8 @@
 public type User record {|
     string nic;
-    string address;
+    string land_no;
+    string street_name;
+    string grama_division_no;
 |};
 
 // public type StatusEntry record {|
@@ -23,3 +25,10 @@ public type User record {|
 //     int address_check_status;
 
 // |};
+
+public type AddressRecord record {|
+    string land_no;
+    string street_name;
+    string grama_division_no;
+
+|};
