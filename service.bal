@@ -32,9 +32,9 @@ function checkAddress(User user) returns boolean|sql:Error? {
 
         check from AddressRecord r in result 
     do {
-        return (string:trim(r.land_no) == string:trim(user.land_no) && 
-        string:trim(r.street_name) == string:trim(user.street_name) &&
-        string:trim(r.grama_division_no) == string:trim(user.grama_division_no));
+        return (string:toLowerAscii((string:trim(r.land_no))) == string:toLowerAscii(string:trim(user.land_no)) && 
+        string:toLowerAscii(string:trim(r.street_name)) == string:toLowerAscii(string:trim(user.street_name)) &&
+        string:toLowerAscii(string:trim(r.grama_division_no)) == string:toLowerAscii(string:trim(user.grama_division_no)));
     };
 
         // compare the retrieved address with the user's address (case-insensitive).
